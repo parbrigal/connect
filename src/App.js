@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
+import React,{ Component } from 'react';
+import Header from './components/layouts/Header';
+import Scroll from './components/layouts/Scroll';
+import SearchBox from './components/res/SearchBox';
+import Footer from './components/layouts/Footer';
+
+import CardList from './components/res/CardList';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+import { people } from './people';
+
+class App extends Component {
+
+  state = {
+    people,
+    searchField : ''
+  }
+
+  componentDidMount() {
+    this.setState({
+      people,
+      searchField : ''
+    })
+  }
+
+  onSearchChange = (ev) => {
+    this.setState({
+      searchField : ev.target.value
+    })
+
+  
+  }
+
+  render() {
+
+    const filteredPeople = people.filter(p => {
+      return p.name.toLowerCase().includes(this.state.searchField) || p.name.includes(this.state.searchField) 
+    });
+
+    return (
+      <div className="App">
+      <Header />
+      <SearchBox searchChange={this.onSearchChange}/>
+      <Scroll> 
+          <CardList people={filteredPeople} />
+      </Scroll>
     </div>
-  );
+    )
+  }
 }
 
 export default App;
+
